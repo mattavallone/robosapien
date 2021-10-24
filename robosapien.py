@@ -6,7 +6,7 @@ Author: Matt Avallone
 
 import time
 import pigpio # http://abyz.co.uk/rpi/pigpio/python.html
-from ir_commands import *
+from ir_codes import *
 
 CYCLE = 833
 
