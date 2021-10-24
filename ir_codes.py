@@ -1,3 +1,9 @@
+"""
+IR Codes for Robosapien
+
+Author: Matt Avallone
+"""
+
 CODE_RSTurnRight       = 0x80
 CODE_RSRightArmUp      = 0x81
 CODE_RSRightArmOut     = 0x82

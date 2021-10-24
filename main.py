@@ -1,13 +1,13 @@
+"""
+Robosapien Project Main
+
+Author: Matt Avallone
+"""
+
 import robosapien
 import argparse
 import lcd
-
-display = lcd.Lcd()
-
-display.lcd_display_string("Robosapien", 1)
-display.lcd_display_string("Hack", 2)
-
-
+from ir_codes import CODE_RSWakeUp
 
 def main():
 	# Initiate the parser
@@ -19,8 +19,22 @@ def main():
 	pin = args.gpio_pin
 	command = args.command
 
-	rs = robosapien.Robosapien(pin)	#create Robo object for GPIO pin
+	# Setup LCD Display
+	display = lcd.Lcd()
+
+	display.lcd_display_string("Robosapien", 1)
+	display.lcd_display_string("Hack", 2)
+
+	# Power on Robosapien HW
+	rs.send_code(CODE_RSWakeUp)
+
+	# Create Robosapien object for GPIO pin
+	rs = robosapien.Robosapien(pin)
+
+	# Execute input command
 	rs.send_code(int(command, 16))
+
+	''' OLD CODE BELOW '''
 	# rs.send_code(0xB1)	#Issue reset command
 	# raw_input('Enter')
 	# rs.send_code(0x81)	#Right arm up
