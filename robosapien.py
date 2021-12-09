@@ -6,7 +6,7 @@ Author: Matt Avallone
 
 import time
 import pigpio # http://abyz.co.uk/rpi/pigpio/python.html
-from ir_codes import *
+from ir_codes import CODE_RSNoOp
 
 CYCLE = 833
 
