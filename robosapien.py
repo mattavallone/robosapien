@@ -9,6 +9,8 @@ import pigpio # http://abyz.co.uk/rpi/pigpio/python.html
 from ir_codes import CODE_RSNoOp
 
 CYCLE = 833
+MAGNET_PIN = 13
+SUCTION_PIN = 16
 
 class Robosapien(object):
 
@@ -62,6 +64,18 @@ class Robosapien(object):
 	def send_code(self, code):
 		self.send_wave(self.create_code(code))
 		time.sleep(0.5)
+
+	def turn_on_magnet(self):
+		self.pi.set_PWM_dutycycle(MAGNET_PIN, 255)
+
+	def turn_off_magnet(self):
+		self.pi.set_PWM_dutycycle(MAGNET_PIN, 0)
+
+	def turn_on_suction(self):
+		self.pi.set_PWM_dutycycle(SUCTION_PIN, 255)
+
+	def turn_off_suction(self):
+		self.pi.set_PWM_dutycycle(SUCTION_PIN, 0)
 
 	def clean_up(self):
 		pi.wave_clear()

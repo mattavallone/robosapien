@@ -66,6 +66,13 @@ def main():
 			else:
 				display.lcd_display_string(rscm[1], 1)
 
+	# Turn on end effector
+	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0]:
+		rs.turn_on_magnet()
+
+	if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0]:
+		rs.turn_on_suction()
+
 	# Execute input command
 	rs.send_code(int(command, 16))
 
@@ -73,6 +80,12 @@ def main():
 
 	display_default()
 
+	# Turn off end effector after waiting 5 seconds
+	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0]:
+		rs.turn_off_magnet()
+
+	if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0]:
+		rs.turn_off_suction()
 
 if __name__ == '__main__':
 	# Setup LCD Display
