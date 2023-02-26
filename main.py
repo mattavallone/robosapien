@@ -16,6 +16,27 @@ def display_default():
 	display.lcd_display_string("Hack", 2)
 	time.sleep(1)
 
+def display_command(command):
+	display.lcd_clear()
+	rs_commands = ir_codes.rs_codes
+	for rscm in rs_commands:
+		if int(command, 0) == rscm[0]:
+			if len(rscm[1]) > 16:
+				ws_count = rscm[1].count(' ')
+				if ws_count == 1:
+					line1, line2 = rscm[1].split(' ')
+				elif ws_count == 2:
+					line1, line2 = rscm[1].split(' ', 1)
+				else:
+					w1, w2, line2 = rscm[1].split(' ', 2)
+					line1 = w1 + ' ' + w2
+
+				display.lcd_display_string(line1, 1)
+				display.lcd_display_string(line2, 2)
+
+			else:
+				display.lcd_display_string(rscm[1], 1)
+
 def wakeup_robosapien(rs):
 	# Power on Robosapien HW
 	display.lcd_clear()
@@ -46,25 +67,7 @@ def main():
 		wakeup_robosapien(rs)
 
 	# Display command name
-	display.lcd_clear()
-	rs_commands = ir_codes.rs_codes
-	for rscm in rs_commands:
-		if int(command, 0) == rscm[0]:
-			if len(rscm[1]) > 16:
-				ws_count = rscm[1].count(' ')
-				if ws_count == 1:
-					line1, line2 = rscm[1].split(' ')
-				elif ws_count == 2:
-					line1, line2 = rscm[1].split(' ', 1)
-				else:
-					w1, w2, line2 = rscm[1].split(' ', 2)
-					line1 = w1 + ' ' + w2
-
-				display.lcd_display_string(line1, 1)
-				display.lcd_display_string(line2, 2)
-
-			else:
-				display.lcd_display_string(rscm[1], 1)
+	display_command(command)
 
 	# Turn on end effector
 	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0]:
