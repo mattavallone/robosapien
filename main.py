@@ -7,61 +7,76 @@ Author: Matt Avallone
 import robosapien
 import argparse
 import lcd
-from ir_codes import CODE_RSWakeUp
+import ir_codes
+import time
+
+def display_default():
+	display.lcd_clear()
+	display.lcd_display_string("Robosapien", 1)
+	display.lcd_display_string("Hack", 2)
+	time.sleep(1)
+
+def wakeup_robosapien(rs):
+	# Power on Robosapien HW
+	display.lcd_clear()
+	display.lcd_display_string("Waking Up...", 1)
+
+	rs.send_code(ir_codes.CODE_RSWakeUp[0])
+
+	time.sleep(10)
 
 def main():
 	# Initiate the parser
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--gpio_pin', type=int, default=14, help='GPIO pin for IR transmitter')
 	parser.add_argument('--command', required=True, help='IR commmand to send to Robosapien')
+	parser.add_argument('--wakeup', type=bool, default=False, help='Flag to initiate wakeup before executing command')
 	args = parser.parse_args()
 
 	pin = args.gpio_pin
 	command = args.command
+	wakeup = args.wakeup
 
-	# Setup LCD Display
-	display = lcd.Lcd()
-
-	display.lcd_display_string("Robosapien", 1)
-	display.lcd_display_string("Hack", 2)
-
-	# Power on Robosapien HW
-	rs.send_code(CODE_RSWakeUp)
+	display_default()
 
 	# Create Robosapien object for GPIO pin
 	rs = robosapien.Robosapien(pin)
 
+	if wakeup:
+		wakeup_robosapien(rs)
+
+	# Display command name
+	display.lcd_clear()
+	rs_commands = ir_codes.rs_codes
+	for rscm in rs_commands:
+		if int(command, 0) == rscm[0]:
+			if len(rscm[1]) > 16:
+				ws_count = rscm[1].count(' ')
+				if ws_count == 1:
+					line1, line2 = rscm[1].split(' ')
+				elif ws_count == 2:
+					line1, line2 = rscm[1].split(' ', 1)
+				else:
+					w1, w2, line2 = rscm[1].split(' ', 2)
+					line1 = w1 + ' ' + w2
+
+				display.lcd_display_string(line1, 1)
+				display.lcd_display_string(line2, 2)
+
+			else:
+				display.lcd_display_string(rscm[1], 1)
+
 	# Execute input command
 	rs.send_code(int(command, 16))
 
-	''' OLD CODE BELOW '''
-	# rs.send_code(0xB1)	#Issue reset command
-	# raw_input('Enter')
-	# rs.send_code(0x81)	#Right arm up
-	# rs.send_code(0x81)
-	# rs.send_code(0x82)	#Right wrist out
-	# rs.send_code(0x85)	#Right wrist in
-	# rs.send_code(0x82)
-	# rs.send_code(0x85)
+	time.sleep(5)
 
-	# raw_input('Enter')
-	# rs.send_code(0x89)	#Left arm up
-	# rs.send_code(0x89)
-	# for i in range(0,2):
-	# 	rs.send_code(0x8B)	#Tilt left
-	# 	rs.send_code(0x83)	#Tilt right	
-	# 	rs.send_code(0x83)
-	# 	rs.send_code(0x8B)
-	# rs.send_code(0x8C)	#Left arm down
-	# rs.send_code(0x84)	#Right arm down
-	# rs.send_code(0x8C)
-	# rs.send_code(0x84)
+	display_default()
 
-	# raw_input('Enter')
-	# rs.send_code(0xC4)	#Hi 5
-
-	# raw_input('Enter')
-	# rs.send_code(0xCE)	#Roar
 
 if __name__ == '__main__':
+	# Setup LCD Display
+	display = lcd.Lcd()
+
+	# Run main
 	main()

@@ -24,7 +24,7 @@ class Robosapien(object):
 		self.wf_lo = self.add_wave(1, 1)
 		self.wf_tail = self.add_wave(8, 8)
 		
-		self.keep_alive = self.create_code(CODE_RSNoOp)
+		self.keep_alive = self.create_code(CODE_RSNoOp[0])
 
 
 	def add_wave(self, hi, lo):
