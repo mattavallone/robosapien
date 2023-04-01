@@ -3,8 +3,8 @@
 Hacking a robosapien using a Raspberry Pi Zero W
 
 
-## Current Mods
+## Current Mods (with links to where to buy)
 
-* 16x2 I2C LCD Display
-* 5V 25N Electromagnet
-* 5V Suction Air Pump
+* [16x2 I2C LCD Display](https://a.co/d/gmZ3h0Z)
+* [5V 25N Electromagnet](https://a.co/d/dGSgEPk)
+* [5V Suction Air Pump](https://a.co/d/f0PVXYk)
