@@ -2,6 +2,7 @@
 
 Hacking a robosapien using a Raspberry Pi Zero W
 
+![Alt Text](images/magnet-pickup.gif)
 
 ## Current Mods (with links to where to buy)
 
