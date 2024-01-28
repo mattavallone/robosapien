@@ -46,11 +46,69 @@ def wakeup_robosapien(rs):
 
 	time.sleep(10)
 
-def main():
+def run(rs):
+	while True:
+		try:
+			command = input("Enter IR command: ").strip()
+
+			# Display command name
+			display_command(command)
+
+			# Turn on end effector
+			if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0] or int(command, 0) == ir_codes.CODE_RSTurnOnMagnet[0]:
+				rs.turn_on_magnet()
+
+			if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0] or int(command, 0) == ir_codes.CODE_RSTurnOnSuction[0]:
+				rs.turn_on_suction()
+
+			# Execute input command
+			rs.send_code(int(command, 16))
+
+			if int(command, 0) == ir_codes.CODE_RSTurnOffMagnet[0]:
+				rs.turn_off_magnet()
+
+			if int(command, 0) == ir_codes.CODE_RSTurnOffSuction[0]:
+				rs.turn_off_suction()
+
+		except Exception as e:
+			print("Error - " + str(e))
+
+def run_once(rs, command, wakeup):
+	if wakeup:
+		wakeup_robosapien(rs)
+
+	# Display command name
+	display_command(command)
+
+	# Turn on end effector
+	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0] or int(command, 0) == ir_codes.CODE_RSTurnOnMagnet[0]:
+		rs.turn_on_magnet()
+
+	if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0] or int(command, 0) == ir_codes.CODE_RSTurnOnSuction[0]:
+		rs.turn_on_suction()
+
+	# Execute input command
+	rs.send_code(int(command, 16))
+
+	time.sleep(5)
+
+	display_default()
+
+	# Turn off end effector after waiting 5 seconds
+	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0] or int(command, 0) == ir_codes.CODE_RSTurnOffMagnet[0]:
+		rs.turn_off_magnet()
+
+	if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0] or int(command, 0) == ir_codes.CODE_RSTurnOffSuction[0]:
+		rs.turn_off_suction()
+
+if __name__ == '__main__':
+	# Setup LCD Display
+	display = lcd.Lcd()
+
 	# Initiate the parser
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--gpio_pin', type=int, default=14, help='GPIO pin for IR transmitter')
-	parser.add_argument('--command', required=True, help='IR commmand to send to Robosapien')
+	parser.add_argument('--command', help='IR commmand to send to Robosapien')
 	parser.add_argument('--wakeup', type=bool, default=False, help='Flag to initiate wakeup before executing command')
 	args = parser.parse_args()
 
@@ -63,36 +121,8 @@ def main():
 	# Create Robosapien object for GPIO pin
 	rs = robosapien.Robosapien(pin)
 
-	if wakeup:
-		wakeup_robosapien(rs)
+	# Run once
+	# run_once(rs, command, wakeup)
 
-	# Display command name
-	display_command(command)
-
-	# Turn on end effector
-	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0]:
-		rs.turn_on_magnet()
-
-	if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0]:
-		rs.turn_on_suction()
-
-	# Execute input command
-	rs.send_code(int(command, 16))
-
-	time.sleep(5)
-
-	display_default()
-
-	# Turn off end effector after waiting 5 seconds
-	if int(command, 0) == ir_codes.CODE_RSRightHandPickup[0]:
-		rs.turn_off_magnet()
-
-	if int(command, 0) == ir_codes.CODE_RSLeftHandPickup[0]:
-		rs.turn_off_suction()
-
-if __name__ == '__main__':
-	# Setup LCD Display
-	display = lcd.Lcd()
-
-	# Run main
-	main()
+	# Run forever
+	run(rs)
