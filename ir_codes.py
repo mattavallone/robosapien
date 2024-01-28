@@ -57,6 +57,11 @@ CODE_RSRoar             = (0xCE, "Roar")
 
 CODE_RSNoOp             = (0xEF, "No Op")
 
+# Custom Operations
+CODE_RSTurnOnMagnet     = (0xF0, "Turn on Magnet")
+CODE_RSTurnOffMagnet    = (0xF1, "Turn off Magnet")
+CODE_RSTurnOnSuction    = (0xF2, "Turn on Suction")
+CODE_RSTurnOffSuction   = (0xF3, "Turn off Suction")
 
 rs_codes = [
 	CODE_RSTurnRight,
@@ -106,5 +111,9 @@ rs_codes = [
 	CODE_RSTalkback,
 	CODE_RSLeftHandStrike1,
 	CODE_RSRoar,
-	CODE_RSNoOp
+	CODE_RSNoOp,
+	CODE_RSTurnOnMagnet,
+	CODE_RSTurnOffMagnet,
+	CODE_RSTurnOnSuction,
+	CODE_RSTurnOffSuction
 ]
