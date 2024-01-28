@@ -77,6 +77,9 @@ class Robosapien(object):
 	def turn_off_suction(self):
 		self.pi.set_PWM_dutycycle(SUCTION_PIN, 0)
 
+	def get_pwm_value(self, pin):
+		return self.pi.get_PWM_dutycycle(pin)
+
 	def clean_up(self):
 		pi.wave_clear()
 		pi.stop() # Disconnect from Pi.
